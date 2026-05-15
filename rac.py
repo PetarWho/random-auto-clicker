@@ -57,9 +57,11 @@ class AutoClicker:
         delay_input_frame.pack(pady=10)
         
         ctk.CTkLabel(delay_input_frame, text="From:", font=(None, 12)).pack(side=tk.LEFT, padx=5)
-        ctk.CTkEntry(delay_input_frame, textvariable=self.delay_from, width=70).pack(side=tk.LEFT, padx=5)
+        self.entry_from = ctk.CTkEntry(delay_input_frame, textvariable=self.delay_from, width=70)
+        self.entry_from.pack(side=tk.LEFT, padx=5)
         ctk.CTkLabel(delay_input_frame, text="To:", font=(None, 12)).pack(side=tk.LEFT, padx=5)
-        ctk.CTkEntry(delay_input_frame, textvariable=self.delay_to, width=70).pack(side=tk.LEFT, padx=5)
+        self.entry_to = ctk.CTkEntry(delay_input_frame, textvariable=self.delay_to, width=70)
+        self.entry_to.pack(side=tk.LEFT, padx=5)
 
         button_frame = ctk.CTkFrame(self.root)
         button_frame.pack(pady=10, padx=20, fill="x")
@@ -137,6 +139,9 @@ class AutoClicker:
         self.capturing_key = True
         self.toggle_key_str.set("Press a key...")
         self.key_button.configure(state="disabled")
+        self.entry_from.configure(state="disabled")
+        self.entry_to.configure(state="disabled")
+        self.root.focus_set()
 
     def run(self):
         self.root.mainloop()
@@ -161,6 +166,8 @@ class AutoClicker:
         self.toggle_key_str.set(self.get_key_display(self.toggle_key))
         self.status_label.configure(text=f"Press {self.get_key_display(self.toggle_key)} to start/stop")
         self.key_button.configure(state="normal")
+        self.entry_from.configure(state="normal")
+        self.entry_to.configure(state="normal")
         self.save_config()
 
     def start_clicking(self):

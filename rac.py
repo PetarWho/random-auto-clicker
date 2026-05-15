@@ -143,19 +143,25 @@ class AutoClicker:
 
     def on_press(self, key):
         if self.capturing_key:
-            self.toggle_key = key
-            self.capturing_key = False
-            self.toggle_key_str.set(self.get_key_display(self.toggle_key))
-            self.status_label.configure(text=f"Press {self.get_key_display(self.toggle_key)} to start/stop")
-            self.key_button.configure(state="normal")
-            self.save_config()
+            self.root.after(0, lambda: self.finish_capturing(key))
             return
 
         if key == self.toggle_key:
-            if not self.clicking:
-                self.start_clicking()
-            else:
-                self.stop_clicking()
+            self.root.after(0, self.toggle_clicking)
+
+    def toggle_clicking(self):
+        if not self.clicking:
+            self.start_clicking()
+        else:
+            self.stop_clicking()
+
+    def finish_capturing(self, key):
+        self.toggle_key = key
+        self.capturing_key = False
+        self.toggle_key_str.set(self.get_key_display(self.toggle_key))
+        self.status_label.configure(text=f"Press {self.get_key_display(self.toggle_key)} to start/stop")
+        self.key_button.configure(state="normal")
+        self.save_config()
 
     def start_clicking(self):
         self.clicking = True
@@ -200,11 +206,6 @@ class AutoClicker:
                 
             button = mouse.Button.left if self.mouse_button.get() == "left" else mouse.Button.right
             mouse_ctrl.click(button)
-
-if __name__ == "__main__":
-    autoclicker = AutoClicker()
-    autoclicker.run()
-
 
 if __name__ == "__main__":
     autoclicker = AutoClicker()
